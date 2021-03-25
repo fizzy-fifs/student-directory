@@ -22,15 +22,23 @@ def print_header
   puts "-------------------"
 end
 
-def print(students)
-  while true do
-    students.select.with_index(1) do |student, index| 
-      if student[:name].length < 12
-        puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)"
-      end
-    end 
-    break
+=begin def print(students)
+  students.select.with_index(1) do |student, index| 
+    if student[:name].length < 12
+      puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
+=end
+
+x = 0 
+while true do
+  x += 1
+  students.select.with_index(1) do |student, index| 
+    if student[:name].length < 12
+      puts "#{index} #{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  end
+  break if x == students.count
 end
 
 def print_footer(names)
