@@ -95,6 +95,11 @@ end
 
 def print(students)
   while true do
+    students.each do |student|
+      if student[:name] == nil
+        puts "You have not entered a student name"
+      end
+    end
     students.select.with_index(1) do |student, index| 
       if student[:name].length < 12
         puts "#{index} #{student[:name].center(5)}; Age: #{student[:age].center(5)}; Height: #{student[:height].center(5)}; Born in #{student[:c_o_b].center(5)} (#{student[:cohort]} cohort)".center(10)
