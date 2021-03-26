@@ -28,7 +28,7 @@ end
 def interactive_menu
   loop do    
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -63,16 +63,16 @@ def input_students
   while true do
     #get another student info from the user
     puts "Please enter the student's name. Hit return again to finish"
-    name = gets.gsub("\n","")
+    name = STDIN.gets.gsub("\n","")
     break if name.empty?
     puts "Please enter the student's age"
-    age = gets.gsub("\n","")
+    age = STDIN.gets.gsub("\n","")
     puts "Please enter the student's height"
-    height = gets.gsub("\n","")
+    height = STDIN.gets.gsub("\n","")
     puts "Please enter the student's country of birth"
-    c_o_b = gets.gsub("\n","")
+    c_o_b = STDIN.gets.gsub("\n","")
     puts "Please enter the student's cohort"
-    cohort = gets.gsub("\n","").to_sym
+    cohort = STDIN.gets.gsub("\n","").to_sym
     cohort = spellcheck(cohort)
     if cohort.empty?
       cohort = :unknown
@@ -146,17 +146,29 @@ def save_students
   file = File.open("students.csv", "w")
   #iterate over the array of students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
+    student_data = [student[:name], student[:cohort], student[:age], student[:height], student[:c_o_b]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do 
-    |line| name, cohort = line.chomp.split(',')
+    |line| name, cohort, age, height, c_o_b = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym}
   end
   file.close
